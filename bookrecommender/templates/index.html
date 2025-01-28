@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Book Recommender</title>
+        <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    </head>
+    <body>
+        <h1>
+            Welcome to Book Recommender.
+        </h1>
+        <form method="get" action="/">
+            <input type="text" name="query" placeholder="Buscar libros...">
+            <button type="submit">Buscar</button>
+        </form>
+        <table border="1">
+            <tr>
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Year</th>
+            </tr>
+            {% for book in books%}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.genre }}</td>
+                <td>{{ book.year}}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </body>
+</html>
