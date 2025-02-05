@@ -17,13 +17,18 @@ with app.app_context():
 
 @app.route('/')
 def home():
-    query = request.args.get('query', '')  # Obtén el texto del input de búsqueda
+    query = request.args.get('query', '')
     if query:
-        # Filtra los libros por título
-        filtered_books = [book for book in books if query.lower() in book['title'].lower()]
+        books = Book.query.filter(
+            (Book.title.ilike(f'%{query}%')) |
+            (Book.author.ilike(f'%{query}%')) |
+            (Book.genre.ilike(f'%{query}%'))
+        ).all()
     else:
-        filtered_books = books  # Si no hay búsqueda, muestra todos los libros
-    return render_template('index.html', books=filtered_books)
+        books = Book.query.all()
+
+    return render_template('index.html', books=books)
+    
 
 
 def index():
