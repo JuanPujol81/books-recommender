@@ -9,11 +9,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 with app.app_context():
+    db.create_all()  # Crear todas las tablas
     if not Book.query.first():
-        sample_books=[Book(title=book['title'], author=book['author'], genre=book['genre'], year=book['year'], description=book['description']) for book in books]
+        sample_books = [
+            Book(title=book['title'], author=book['author'], genre=book['genre'], year=book['year'], description=book['description'])
+            for book in books
+        ]
         db.session.add_all(sample_books)
         db.session.commit()
-    db.create_all()
 
 @app.route('/')
 def home():
@@ -28,8 +31,6 @@ def home():
         books = Book.query.all()
 
     return render_template('index.html', books=books)
-    
-
 
 def index():
     return "Welcome to the Book Recommender!"
