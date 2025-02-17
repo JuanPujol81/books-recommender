@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from models import db, Book
 from books import books
 
@@ -32,8 +32,20 @@ def home():
 
     return render_template('index.html', books=books)
 
-def index():
-    return "Welcome to the Book Recommender!"
+
+
+
+@app.route('/delete_book/<int:book_id>', methods=['DELETE'])
+def delete_book(book_id):
+    book = Book.query.get(book_id)
+    if book:
+        db.session.delete(book)
+        db.session.commit()
+        return jsonify({'message': f'Book with {book_id} deleted'}), 204
+    else:
+        return jsonify({'message': f'Book with {book_id} not found'}), 404
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
