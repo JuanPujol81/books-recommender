@@ -109,3 +109,10 @@ form button.delete:hover {
 .search-bar button:hover {
     background-color: #025aa5;
 }
+
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+}

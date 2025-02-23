@@ -50,12 +50,18 @@ def delete_book(book_id):
     
 
 # Route to add a new book to the database
-@app.route('/add_book' , methods=['POST'])
+@app.route('/add_book', methods=['POST'])
 def add_book():
-    data = request.get_json()
-    new_book = Book(title=data['title'], author=data['author'], genre=data['genre'], year=data['year'], description=data['description'])
+    title = request.form['title']
+    author = request.form['author']
+    genre = request.form['genre']
+    year = request.form['year']
+    description = request.form['description']
+    
+    new_book = Book(title=title, author=author, genre=genre, year=year, description=description)
     db.session.add(new_book)
     db.session.commit()
+    
     return jsonify({'message': f'Book {new_book.title} added successfully'}), 201
 
 
