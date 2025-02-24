@@ -3,45 +3,128 @@
     <head>
         <title>Book Recommender</title>
         <link rel="stylesheet" type="text/css" href="../static/styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <h1>
-            Welcome to Book Recommender.
-        </h1>
-        <form method="get" action="/">
-            <input type="text" name="query" placeholder="Buscar libros...">
-            <button type="submit">Search</button>
-        </form>
-        <table border="1">
-            <tr>
-                <th>Book Title</th>
-                <th>Author</th>
-                <th>Genre</th>
-                <th>Year</th>
-            </tr>
-            {% for book in books%}
-            <tr>
-                <td>{{ book.title }}</td>
-                <td>{{ book.author }}</td>
-                <td>{{ book.genre }}</td>
-                <td>{{ book.year}}</td>
-            </tr>
-            {% endfor %}
+        <div class="container">
+            <h1>Welcome to Book Recommender.</h1>
+            <form method="get" action="/">
+                <input type="text" name="query" placeholder="Buscar libros...">
+                <button type="submit">Search</button>
+            </form>
+            <table border="1">
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th>Year</th>
+                </tr>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.genre }}</td>
+                    <td>{{ book.year }}</td>
+                </tr>
+                {% endfor %}
+            </table>
 
-        </table>
-        <form action="/add_book" method="post">
-            <h2>Add a New Book</h2>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required><br>
-            <label for="author">Author:</label>
-            <input type="text" id="author" name="author" required><br>
-            <label for="genre">Genre:</label>
-            <input type="text" id="genre" name="genre" required><br>
-            <label for="year">Year:</label>
-            <input type="number" id="year" name="year" required><br>
-            <label for="description">Description:</label>
-            <input type="text" id="description" name="description" required><br>
-            <button type="submit">Add Book</button>
-        </form>
+            <!-- Dropdown for Insert and Delete Book -->
+            <div class="dropdown" style="margin-top: 20px;">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Options
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" id="insertBookOption">Insert Book</a>
+                    <a class="dropdown-item" href="#" id="deleteBookOption">Delete Book</a>
+                </div>
+            </div>
+
+            <!-- Form for Insert Book -->
+            <div id="insertBookForm" style="display:none; margin-top:20px;">
+                <h2>Insert Book</h2>
+                <form id="insertBook">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" class="form-control" id="author" name="author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="genre">Genre</label>
+                        <input type="text" class="form-control" id="genre" name="genre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <input type="number" class="form-control" id="year" name="year" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" name="description" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Insert Book</button>
+                </form>
+            </div>
+
+            <!-- Form for Delete Book -->
+            <div id="deleteBookForm" style="display:none; margin-top:20px;">
+                <h2>Delete Book</h2>
+                <form id="deleteBook">
+                    <div class="form-group">
+                        <label for="bookId">Book ID</label>
+                        <input type="number" class="form-control" id="bookId" name="bookId" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Delete Book</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                $('#insertBookOption').click(function() {
+                    $('#insertBookForm').toggle();
+                    $('#deleteBookForm').hide();
+                });
+
+                $('#deleteBookOption').click(function() {
+                    $('#deleteBookForm').toggle();
+                    $('#insertBookForm').hide();
+                });
+
+                $('#insertBook').submit(function(event) {
+                    event.preventDefault();
+                    $.ajax({
+                        url: '/add_book',
+                        method: 'POST',
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            alert(response.message);
+                            location.reload();
+                        }
+                    });
+                });
+
+                $('#deleteBook').submit(function(event) {
+                    event.preventDefault();
+                    const bookId = $('#bookId').val();
+                    $.ajax({
+                        url: `/delete_book/${bookId}`,
+                        method: 'DELETE',
+                        success: function(response) {
+                            alert(response.message);
+                            location.reload();
+                        },
+                        error: function(response) {
+                            alert(response.responseJSON.message);
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 </html>
