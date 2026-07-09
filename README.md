@@ -16,7 +16,7 @@ I built a Books Recommender with Flask, SQLite, and SQLAlchemy. The app seeds a 
 - Seed data loaded automatically on first run.
 - Browser UI for search, recommendations, adding books, and deleting books.
 - JSON API endpoints for integration or testing.
-- Pytest coverage for core flows.
+- Automated tests for core flows.
 - `.gitignore` excludes virtual environments, SQLite databases, and cache files.
 
 ## Tech Stack
@@ -26,7 +26,7 @@ I built a Books Recommender with Flask, SQLite, and SQLAlchemy. The app seeds a 
 - Flask-SQLAlchemy
 - SQLite
 - HTML/CSS
-- Pytest
+- unittest
 
 ## Project Structure
 
@@ -82,7 +82,7 @@ flask --app bookrecommender.app:create_app run
 ## Run Tests
 
 ```bash
-pytest
+python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 The tests use an in-memory SQLite database, so they do not depend on local database files.

@@ -2,7 +2,6 @@ __pycache__/
 *.py[cod]
 *.sqlite
 *.db
-.pytest_cache/
 .pycache/
 .coverage
 htmlcov/
