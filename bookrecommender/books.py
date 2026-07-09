@@ -4,41 +4,69 @@ books = [
         "author": "F. Scott Fitzgerald",
         "genre": "Fiction",
         "year": 1925,
-        "description": "The Great Gatsby is a novel by American writer F. Scott Fitzgerald. Set in the Jazz Age on Long Island, near New York City, the novel depicts first-person narrator Nick Carraway's interactions with mysterious millionaire Jay Gatsby and Gatsby's obsession to reunite with his former lover, Daisy Buchanan."
+        "description": "A Jazz Age novel about wealth, reinvention, longing, and social class in Long Island and New York City.",
     },
     {
         "title": "The Catcher in the Rye",
         "author": "J.D. Salinger",
         "genre": "Fiction",
         "year": 1951,
-        "description": "The Catcher in the Rye is a novel by J. D. Salinger, partially published in serial form in 1945–1946 and as a novel in 1951. It was originally intended for adults but is often read by adolescents for its themes of angst, alienation, and as a critique on superficiality in society."
+        "description": "A coming-of-age novel about alienation, identity, adolescence, and criticism of social superficiality.",
     },
     {
         "title": "To Kill a Mockingbird",
         "author": "Harper Lee",
         "genre": "Fiction",
         "year": 1960,
-        "description": "To Kill a Mockingbird is a novel by Harper Lee published in 1960. Instantly successful, widely read in high schools and middle schools in the United States, it has become a classic of modern American literature, winning the Pulitzer Prize."
+        "description": "A classic novel about justice, prejudice, childhood, empathy, and moral courage in the American South.",
     },
     {
         "title": "1984",
         "author": "George Orwell",
         "genre": "Fiction",
         "year": 1949,
-        "description": "1984 is a dystopian social science fiction novel by English novelist George Orwell. It was published on 8 June 1949 by Secker & Warburg as Orwell's ninth and final book completed in his lifetime."
+        "description": "A dystopian novel about surveillance, authoritarianism, propaganda, censorship, and political control.",
     },
     {
         "title": "Pride and Prejudice",
         "author": "Jane Austen",
         "genre": "Fiction",
         "year": 1813,
-        "description": "Pride and Prejudice is a romantic novel of manners written by Jane Austen in 1813. The novel follows the character development of Elizabeth Bennet, the dynamic protagonist of the book who learns about the repercussions of hasty judgments and comes to appreciate the difference between superficial goodness and actual goodness."
+        "description": "A romantic novel of manners about Elizabeth Bennet, family expectations, judgment, class, and personal growth.",
     },
     {
-        "title": "The Diary of a Young",
-        "author": "Jane Austen",
-        "genre": "Fiction",
-        "year": 1813,
-        "description": "The Diary of a Young Girl is a book of the writings from the Dutch language diary kept by Anne Frank while she was in hiding for two years with her family during the Nazi occupation of the Netherlands."
+        "title": "The Diary of a Young Girl",
+        "author": "Anne Frank",
+        "genre": "Memoir",
+        "year": 1947,
+        "description": "A diary and memoir about adolescence, family, fear, hope, and hiding during the Nazi occupation of the Netherlands.",
+    },
+    {
+        "title": "Dune",
+        "author": "Frank Herbert",
+        "genre": "Science Fiction",
+        "year": 1965,
+        "description": "A science fiction epic about politics, ecology, religion, power, and survival on a desert planet.",
+    },
+    {
+        "title": "The Hobbit",
+        "author": "J.R.R. Tolkien",
+        "genre": "Fantasy",
+        "year": 1937,
+        "description": "A fantasy adventure about courage, friendship, dragons, treasure, and an unexpected journey.",
+    },
+    {
+        "title": "Atomic Habits",
+        "author": "James Clear",
+        "genre": "Self Help",
+        "year": 2018,
+        "description": "A practical nonfiction book about behavior change, habit systems, identity, and continuous improvement.",
+    },
+    {
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "genre": "Technology",
+        "year": 2008,
+        "description": "A software engineering book about readable code, maintainability, testing, refactoring, and professional practice.",
     }
 ]

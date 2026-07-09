@@ -1,118 +1,230 @@
-/* Estilos globales */
+:root {
+  --text: #172033;
+  --muted: #667085;
+  --line: #d7dde8;
+  --panel: #ffffff;
+  --background: #f4f7fb;
+  --accent: #1f5eff;
+  --accent-dark: #1647c7;
+  --danger: #b42318;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  color: var(--text);
+  background: var(--background);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  line-height: 1.6;
 }
 
-/* Contenedor principal */
-.container {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+button,
+input,
+textarea {
+  font: inherit;
 }
 
-/* Títulos */
-h1, h2 {
-    color: #333;
+button,
+.secondary-link {
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: none;
 }
 
-/* Formulario para añadir libros */
-form {
-    margin-bottom: 20px;
+button:hover,
+.secondary-link:hover {
+  background: var(--accent-dark);
 }
-
-form input[type="text"],
-form input[type="number"] {
-    width: calc(25% - 10px);
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-form button {
-    padding: 10px 20px;
-    margin: 5px;
-    background-color: #5cb85c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-form button:hover {
-    background-color: #4cae4c;
-}
-
-/* Tabla de libros */
-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
-    color: #333;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Botón de eliminar */
-form button.delete {
-    background-color: #d9534f;
-}
-
-form button.delete:hover {
-    background-color: #c9302c;
-}
-
-/* Barra de búsqueda */
-.search-bar {
-    margin-bottom: 20px;
-}
-
-.search-bar input[type="text"] {
-    width: 50%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.search-bar button {
-    padding: 10px 20px;
-    background-color: #0275d8;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.search-bar button:hover {
-    background-color: #025aa5;
-}
-
 
 label {
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px 12px;
+  background: #ffffff;
+  color: var(--text);
+}
+
+.page {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 42px 0;
+}
+
+.hero {
+  padding: 18px 0 28px;
+}
+
+.hero h1 {
+  max-width: 760px;
+  margin: 0 0 12px;
+  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  line-height: 1.02;
+}
+
+.hero p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.12rem;
+}
+
+.eyebrow {
+  margin-bottom: 10px;
+  color: var(--accent) !important;
+  font-size: 0.9rem !important;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.panel {
+  margin: 18px 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.section-heading p,
+.meta,
+.reason,
+.empty-state,
+#form-message {
+  color: var(--muted);
+}
+
+.search-form {
+  display: grid;
+  gap: 10px;
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
+}
+
+.recommendation-grid,
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.book-card {
+  display: grid;
+  gap: 14px;
+  align-content: space-between;
+  min-height: 100%;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.book-card.featured {
+  border-color: #aabcf7;
+  background: #f8faff;
+}
+
+.book-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.08rem;
+}
+
+.book-card p {
+  margin: 0;
+}
+
+.score {
+  margin-bottom: 8px !important;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.reason {
+  margin-top: 12px !important;
+  font-size: 0.95rem;
+}
+
+.delete-button {
+  justify-self: start;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid #f0b8b2;
+}
+
+.delete-button:hover {
+  background: #fff3f1;
+}
+
+.book-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.full-width,
+.book-form button,
+#form-message {
+  grid-column: 1 / -1;
+}
+
+.book-form button {
+  justify-self: start;
+}
+
+@media (max-width: 820px) {
+  .page {
+    width: min(100% - 24px, 1120px);
+    padding: 24px 0;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .search-row,
+  .recommendation-grid,
+  .catalog,
+  .book-form {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
     display: block;
-    margin-bottom: 5px;
-    text-align: left;
+  }
 }

@@ -1,50 +1,181 @@
-This application is designed to recommend books based on user preferences. It provides a simple interface for users to input their favorite genres or recent reads and generates personalized book suggestions. The system utilizes a basic recommendation model powered by Python, ensuring tailored recommendations that enhance the user's reading experience.
+# Books Recommender
 
-**Technologies and Tools**
+A small Flask application that recommends books from a local catalog using transparent content-based scoring.
 
-**Python (Backend and Recommendation Model):**  
-- **Usage:** Implement the recommendation system's logic and process data.  
-- **Key libraries:**  
-  - `pandas`: To manipulate and analyze book and user data.  
-  - `scikit-learn`: For basic recommendation algorithms (e.g., collaborative filtering).  
-  - `Flask` or `FastAPI`: To create an API for communication between the frontend and backend.  
+The project is designed as a portfolio-ready backend/web app: it has a searchable UI, JSON API endpoints, SQLite persistence through SQLAlchemy, seed data, validation, tests, and clear setup instructions.
 
-**HTML/CSS/JavaScript (Frontend):**  
-- **Usage:** Create a basic user interface for interactions (e.g., entering preferences, viewing recommendations).  
-- **Additional framework:**  
-  - Bootstrap: For a more visually appealing and responsive design.  
+## Interview Summary
 
-**SQLite (Database):**  
-- **Usage:** Store book data and user interactions.  
-- **Advantages:** Lightweight, easy to set up, and ideal for small projects.  
+I built a Books Recommender with Flask, SQLite, and SQLAlchemy. The app seeds a book catalog, lets users search by title, author, genre, or description, and returns ranked recommendations using a deterministic content-matching score. It also exposes JSON endpoints for catalog search and recommendations, includes validation for create/delete actions, and has automated tests for the main user and API flows.
 
-**GitHub Codespaces:**  
-- **Usage:** Serves as the integrated development environment where everything is centralized.  
+## Features
 
-**GitHub Copilot (Optional):**  
-- **Usage:** To generate code snippets and accelerate development.  
+- Searchable book catalog.
+- Content-based recommendation scoring.
+- SQLite database with SQLAlchemy models.
+- Seed data loaded automatically on first run.
+- Browser UI for search, recommendations, adding books, and deleting books.
+- JSON API endpoints for integration or testing.
+- Pytest coverage for core flows.
+- `.gitignore` excludes virtual environments, SQLite databases, and cache files.
 
-**Integration Tools:**  
-- **Fetch API or Axios (Frontend):** Used to send HTTP requests from the frontend to the backend (e.g., to submit user preferences or fetch recommendations).  
+## Tech Stack
 
----
+- Python
+- Flask
+- Flask-SQLAlchemy
+- SQLite
+- HTML/CSS
+- Pytest
 
-**How the Technologies Connect**
+## Project Structure
 
-**Frontend (HTML/JS):**  
-- The interface collects user input (e.g., favorite genres or the last book read).  
-- Sends this information to the backend via an HTTP request (POST or GET) using JavaScript.  
+```text
+.
+├── bookrecommender/
+│   ├── app.py                 # Flask app factory, routes, validation
+│   ├── books.py               # Seed catalog
+│   ├── models.py              # SQLAlchemy Book model
+│   ├── recommender.py         # Content-based recommendation scoring
+│   ├── static/styles.css      # UI styling
+│   └── templates/index.html   # Browser UI
+├── tests/test_app.py          # API and app tests
+├── requirements.txt
+└── README.md
+```
 
-**Backend (Python with Flask or FastAPI):**  
-- Receives the request from the frontend.  
-- Processes user data using the recommendation model (e.g., collaborative or content-based filtering algorithm).  
-- Queries the SQLite database to find relevant books.  
-- Responds to the frontend with recommendations.  
+## Local Setup
 
-**Database (SQLite):**  
-- Contains an initial dataset of books (titles, authors, genres, ratings, etc.).  
-- Stores user data if a login or personalization system is implemented.  
+Create and activate a virtual environment:
 
-**Recommendation Model (Python):**  
-- Processes data to generate personalized recommendations.  
-- Uses libraries such as `scikit-learn` to implement basic recommendation algorithms.  
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the app:
+
+```bash
+python -m bookrecommender.app
+```
+
+Open:
+
+```text
+http://127.0.0.1:5000
+```
+
+The SQLite database is created automatically in `instance/books.db`.
+
+Alternative Flask CLI command:
+
+```bash
+flask --app bookrecommender.app:create_app run
+```
+
+## Run Tests
+
+```bash
+pytest
+```
+
+The tests use an in-memory SQLite database, so they do not depend on local database files.
+
+## API Endpoints
+
+### `GET /health`
+
+Returns service health:
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+### `GET /api/books`
+
+Returns all books.
+
+Optional query filter:
+
+```text
+/api/books?query=surveillance
+```
+
+### `GET /api/recommendations`
+
+Returns ranked recommendations for a query:
+
+```text
+/api/recommendations?query=software testing
+```
+
+Example response shape:
+
+```json
+{
+  "status": "success",
+  "query": "software testing",
+  "count": 1,
+  "recommendations": [
+    {
+      "id": 10,
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "genre": "Technology",
+      "year": 2008,
+      "description": "...",
+      "score": 2,
+      "reasons": ["description match"]
+    }
+  ]
+}
+```
+
+### `POST /add_book`
+
+Adds a book. Accepts form data or JSON with:
+
+- `title`
+- `author`
+- `genre`
+- `year`
+- `description`
+
+### `DELETE /delete_book/<book_id>`
+
+Deletes a book by id.
+
+## Recommendation Logic
+
+The recommendation engine is deterministic and explainable:
+
+1. Tokenizes the user query.
+2. Compares query tokens against each book's title, author, genre, and description.
+3. Applies weighted scoring:
+   - title matches: highest weight
+   - author matches
+   - genre matches
+   - description matches
+4. Returns the highest-scoring books with human-readable match reasons.
+
+This keeps the project easy to review in interviews because the behavior is understandable without external services or hidden model files.
+
+## Portfolio Notes
+
+This project demonstrates:
+
+- Flask app structure and app factory pattern.
+- SQLAlchemy model design.
+- SQLite persistence.
+- API design and JSON responses.
+- Input validation and error handling.
+- Testable recommendation logic.
+- Clean repository hygiene by excluding generated virtual environments and local database files.

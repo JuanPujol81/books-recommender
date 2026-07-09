@@ -1,130 +1,181 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Book Recommender</title>
-        <link rel="stylesheet" type="text/css" href="../static/styles.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Welcome to Book Recommender.</h1>
-            <form method="get" action="/">
-                <input type="text" name="query" placeholder="Buscar libros...">
-                <button type="submit">Search</button>
-            </form>
-            <table border="1">
-                <tr>
-                    <th>Book Title</th>
-                    <th>Author</th>
-                    <th>Genre</th>
-                    <th>Year</th>
-                </tr>
-                {% for book in books %}
-                <tr>
-                    <td>{{ book.title }}</td>
-                    <td>{{ book.author }}</td>
-                    <td>{{ book.genre }}</td>
-                    <td>{{ book.year }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A Flask and SQLite book recommender with searchable catalog, recommendation scoring, and JSON API endpoints."
+    />
+    <title>Books Recommender</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <p class="eyebrow">Flask · SQLite · Recommendation scoring</p>
+        <h1>Books Recommender</h1>
+        <p>
+          Search by mood, topic, author, genre, or title. The app ranks matching
+          books with a transparent content-based scoring system and keeps the
+          catalog editable through simple API-backed actions.
+        </p>
+      </header>
 
-            <!-- Dropdown for Insert and Delete Book -->
-            <div class="dropdown" style="margin-top: 20px;">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Options
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#" id="insertBookOption">Insert Book</a>
-                    <a class="dropdown-item" href="#" id="deleteBookOption">Delete Book</a>
-                </div>
-            </div>
+      <section class="panel">
+        <form class="search-form" method="get" action="/">
+          <label for="query">Find a recommendation</label>
+          <div class="search-row">
+            <input
+              id="query"
+              type="search"
+              name="query"
+              value="{{ query }}"
+              placeholder="Try: dystopian politics, fantasy adventure, software, Jane Austen"
+            />
+            <button type="submit">Search</button>
+            {% if query %}
+              <a class="secondary-link" href="/">Clear</a>
+            {% endif %}
+          </div>
+        </form>
+      </section>
 
-            <!-- Form for Insert Book -->
-            <div id="insertBookForm" style="display:none; margin-top:20px;">
-                <h2>Insert Book</h2>
-                <form id="insertBook">
-                    <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="author">Author</label>
-                        <input type="text" class="form-control" id="author" name="author" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="genre">Genre</label>
-                        <input type="text" class="form-control" id="genre" name="genre" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="year">Year</label>
-                        <input type="number" class="form-control" id="year" name="year" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-success">Insert Book</button>
-                </form>
-            </div>
+      {% if query %}
+        <section class="panel">
+          <div class="section-heading">
+            <h2>Recommendations for "{{ query }}"</h2>
+            <p>{{ recommendations|length }} ranked match{{ '' if recommendations|length == 1 else 'es' }}</p>
+          </div>
 
-            <!-- Form for Delete Book -->
-            <div id="deleteBookForm" style="display:none; margin-top:20px;">
-                <h2>Delete Book</h2>
-                <form id="deleteBook">
-                    <div class="form-group">
-                        <label for="bookId">Book ID</label>
-                        <input type="number" class="form-control" id="bookId" name="bookId" required>
-                    </div>
-                    <button type="submit" class="btn btn-danger">Delete Book</button>
-                </form>
+          {% if recommendations %}
+            <div class="recommendation-grid">
+              {% for recommendation in recommendations %}
+                <article class="book-card featured">
+                  <div>
+                    <p class="score">Score {{ recommendation.score }}</p>
+                    <h3>{{ recommendation.book.title }}</h3>
+                    <p class="meta">
+                      {{ recommendation.book.author }} · {{ recommendation.book.genre }} ·
+                      {{ recommendation.book.year }}
+                    </p>
+                    <p>{{ recommendation.book.description }}</p>
+                    <p class="reason">
+                      Why: {{ recommendation.reasons|join(', ') }}
+                    </p>
+                  </div>
+                </article>
+              {% endfor %}
             </div>
+          {% else %}
+            <p class="empty-state">
+              No strong recommendations yet. Try a broader topic such as
+              "fiction", "politics", "technology", or "adventure".
+            </p>
+          {% endif %}
+        </section>
+      {% endif %}
+
+      <section class="panel">
+        <div class="section-heading">
+          <h2>Catalog</h2>
+          <p>{{ books|length }} visible book{{ '' if books|length == 1 else 's' }}</p>
         </div>
 
-        <script>
-            $(document).ready(function() {
-                $('#insertBookOption').click(function() {
-                    $('#insertBookForm').toggle();
-                    $('#deleteBookForm').hide();
-                });
+        <div class="catalog">
+          {% for book in books %}
+            <article class="book-card">
+              <div>
+                <h3>{{ book.title }}</h3>
+                <p class="meta">{{ book.author }} · {{ book.genre }} · {{ book.year }}</p>
+                <p>{{ book.description }}</p>
+              </div>
+              <button
+                class="delete-button"
+                type="button"
+                data-book-id="{{ book.id }}"
+              >
+                Delete
+              </button>
+            </article>
+          {% else %}
+            <p class="empty-state">No books match this search.</p>
+          {% endfor %}
+        </div>
+      </section>
 
-                $('#deleteBookOption').click(function() {
-                    $('#deleteBookForm').toggle();
-                    $('#insertBookForm').hide();
-                });
+      <section class="panel">
+        <div class="section-heading">
+          <h2>Add a book</h2>
+          <p>Use this to extend the catalog during local demos.</p>
+        </div>
 
-                $('#insertBook').submit(function(event) {
-                    event.preventDefault();
-                    $.ajax({
-                        url: '/add_book',
-                        method: 'POST',
-                        data: $(this).serialize(),
-                        success: function(response) {
-                            alert(response.message);
-                            location.reload();
-                        }
-                    });
-                });
+        <form id="add-book-form" class="book-form">
+          <label>
+            Title
+            <input name="title" type="text" required />
+          </label>
+          <label>
+            Author
+            <input name="author" type="text" required />
+          </label>
+          <label>
+            Genre
+            <input name="genre" type="text" required />
+          </label>
+          <label>
+            Year
+            <input name="year" type="number" min="0" max="2100" required />
+          </label>
+          <label class="full-width">
+            Description
+            <textarea name="description" rows="4" required></textarea>
+          </label>
+          <button type="submit">Add book</button>
+          <p id="form-message" role="status"></p>
+        </form>
+      </section>
+    </main>
 
-                $('#deleteBook').submit(function(event) {
-                    event.preventDefault();
-                    const bookId = $('#bookId').val();
-                    $.ajax({
-                        url: `/delete_book/${bookId}`,
-                        method: 'DELETE',
-                        success: function(response) {
-                            alert(response.message);
-                            location.reload();
-                        },
-                        error: function(response) {
-                            alert(response.responseJSON.message);
-                        }
-                    });
-                });
-            });
-        </script>
-    </body>
+    <script>
+      const addBookForm = document.querySelector("#add-book-form");
+      const formMessage = document.querySelector("#form-message");
+
+      addBookForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const response = await fetch("/add_book", {
+          method: "POST",
+          body: new FormData(addBookForm),
+        });
+        const payload = await response.json();
+
+        formMessage.textContent = payload.message;
+
+        if (response.ok) {
+          addBookForm.reset();
+          window.location.reload();
+        }
+      });
+
+      document.querySelectorAll(".delete-button").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const bookId = button.dataset.bookId;
+          const response = await fetch(`/delete_book/${bookId}`, {
+            method: "DELETE",
+          });
+          const payload = await response.json();
+
+          if (!response.ok) {
+            alert(payload.message);
+            return;
+          }
+
+          window.location.reload();
+        });
+      });
+    </script>
+  </body>
 </html>
